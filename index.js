@@ -30,6 +30,7 @@ async function run() {
             const categories = await categoriesCollection.findOne(query);
             res.send(categories);
         });
+
     }
     finally {
 
