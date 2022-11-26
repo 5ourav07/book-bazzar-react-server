@@ -17,7 +17,8 @@ async function run() {
     try {
         const categoriesCollection = client.db('bookBazzar').collection('categories');
         const booksCollection = client.db('bookBazzar').collection('books');
-        const orderCollection = client.db('bookBazzar').collection('orders');
+        const ordersCollection = client.db('bookBazzar').collection('orders');
+        const usersCollection = client.db('bookBazzar').collection('users');
 
         app.get('/categories', async (req, res) => {
             const query = {}
@@ -51,16 +52,21 @@ async function run() {
             const email = req.query.email;
 
             const query = { email: email };
-            const order = await orderCollection.find(query).toArray();
+            const order = await ordersCollection.find(query).toArray();
             res.send(order);
         })
 
         app.post('/orders', async (req, res) => {
             const order = req.body;
-            const result = await orderCollection.insertOne(order);
+            const result = await ordersCollection.insertOne(order);
             res.send(result);
         });
 
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        });
     }
     finally {
 
