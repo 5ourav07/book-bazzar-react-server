@@ -17,6 +17,7 @@ async function run() {
     try {
         const categoriesCollection = client.db('bookBazzar').collection('categories');
         const booksCollection = client.db('bookBazzar').collection('books');
+        const orderCollection = client.db('bookBazzar').collection('orders');
 
         app.get('/categories', async (req, res) => {
             const query = {}
@@ -44,6 +45,12 @@ async function run() {
             const cursor = await booksCollection.find(query);
             const books = await cursor.toArray();
             res.send(books);
+        });
+
+        app.post('/orders', async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
+            res.send(result);
         });
 
     }
