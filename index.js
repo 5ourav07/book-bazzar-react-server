@@ -47,6 +47,14 @@ async function run() {
             res.send(books);
         });
 
+        app.get('/orders', async (req, res) => {
+            const email = req.query.email;
+
+            const query = { email: email };
+            const order = await orderCollection.find(query).toArray();
+            res.send(order);
+        })
+
         app.post('/orders', async (req, res) => {
             const order = req.body;
             const result = await orderCollection.insertOne(order);
