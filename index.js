@@ -72,6 +72,12 @@ async function run() {
             res.send(books);
         });
 
+        app.post('/books', async (req, res) => {
+            const book = req.body;
+            const result = await booksCollection.insertOne(book);
+            res.send(result);
+        });
+
         //orders
 
         app.get('/orders', verifyJWT, async (req, res) => {
