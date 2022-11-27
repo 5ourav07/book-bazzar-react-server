@@ -103,13 +103,25 @@ async function run() {
                 const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '7d' })
                 return res.send({ accessToken: token });
             }
-            res.status(403).send({ accessToken: '' })
+            return res.status(403).send({ accessToken: '' })
         });
 
         //users
 
         app.get('/users', async (req, res) => {
             const query = {};
+            const users = await usersCollection.find(query).toArray();
+            res.send(users);
+        });
+
+        app.get('/buyer-users', async (req, res) => {
+            const query = { role: 'buyer' };
+            const users = await usersCollection.find(query).toArray();
+            res.send(users);
+        });
+
+        app.get('/seller-users', async (req, res) => {
+            const query = { role: 'seller' };
             const users = await usersCollection.find(query).toArray();
             res.send(users);
         });
