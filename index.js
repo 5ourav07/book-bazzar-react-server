@@ -88,6 +88,13 @@ async function run() {
             res.send(result);
         });
 
+        app.delete('/books/:id', verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await booksCollection.deleteOne(filter);
+            res.send(result);
+        })
+
         // app.post('/wishlist:id', async (req, res) => {
         //     const id = req.params.id;
         //     const query = { _id: ObjectId(id) };
