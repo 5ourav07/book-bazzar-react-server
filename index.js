@@ -72,6 +72,13 @@ async function run() {
             res.send(books);
         });
 
+        app.get('/books/mybooks', async (req, res) => {
+            const name = req.query.name;
+            const query = { seller_name: name };
+            const book = await booksCollection.find(query).toArray();
+            res.send(book);
+        })
+
         app.post('/books', async (req, res) => {
             const book = req.body;
             const result = await booksCollection.insertOne(book);
