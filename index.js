@@ -38,7 +38,7 @@ async function run() {
     try {
         const categoriesCollection = client.db('bookBazzar').collection('categories');
         const booksCollection = client.db('bookBazzar').collection('books');
-        const whishlistCollection = client.db('bookBazzar').collection('whishlist');
+        const reportCollection = client.db('bookBazzar').collection('report');
         const ordersCollection = client.db('bookBazzar').collection('orders');
         const usersCollection = client.db('bookBazzar').collection('users');
         const paymentsCollection = client.db('bookBazzar').collection('payments');
@@ -75,6 +75,13 @@ async function run() {
             res.send(books);
         });
 
+        app.get('/books/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const book = await booksCollection.findOne(query);
+            res.send(book);
+        });
+
         app.get('/books/mybooks', async (req, res) => {
             const name = req.query.name;
             const query = { seller_name: name };
@@ -94,14 +101,6 @@ async function run() {
             const result = await booksCollection.deleteOne(filter);
             res.send(result);
         })
-
-        // app.post('/wishlist:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const book = await categoriesCollection.findOne(query);
-        //     const result = await whishlistCollection.insertOne(book);
-        //     res.send(result);
-        // });
 
         //orders
 
@@ -237,6 +236,21 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         })
+
+        //report
+
+        app.get('/reportedItems', async (req, res) => {
+            const query = {}
+            const cursor = reportCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        app.post('/books/report', async (req, res) => {
+            const book = req.body;
+            const result = await reportCollection.insertOne(book);
+            res.send(result);
+        });
     }
     finally {
 
